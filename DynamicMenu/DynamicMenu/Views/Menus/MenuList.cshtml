@@ -1,0 +1,38 @@
+﻿@model IEnumerable<DynamicMenu.Models.MenuMaster>
+
+<div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+</div>
+<div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+        @ShowMenu(Model)
+    </ul>
+</div>
+
+@helper ShowMenu(IEnumerable<DynamicMenu.Models.MenuMaster> menuList)
+{
+    foreach (var menu in menuList)
+    {
+        <li class="@(menu.MenuList.Any() ? "dropdown":"")">
+            @if (menu.MenuList.Any())
+            {
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                    @menu.MenuText
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    @ShowMenu(menu.MenuList)
+                </ul>
+            }
+            else
+            {
+                <a href="@Url.Action(menu.MenuUrl)">@menu.MenuText</a>
+            }
+        </li>
+    }
+}

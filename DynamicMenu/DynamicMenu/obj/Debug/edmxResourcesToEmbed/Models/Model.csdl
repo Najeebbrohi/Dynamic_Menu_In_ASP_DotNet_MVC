@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DynamicMenuModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="MainMenu">
+    <Key>
+      <PropertyRef Name="MenuId" />
+    </Key>
+    <Property Name="MenuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MenuName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ActionName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ControllerName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="SubMenus" Relationship="Self.FK_SubMenus_MainMenus" FromRole="MainMenus" ToRole="SubMenus" />
+  </EntityType>
+  <EntityType Name="SubMenu">
+    <Key>
+      <PropertyRef Name="SubMenuId" />
+    </Key>
+    <Property Name="SubMenuId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SubMenuName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ActionName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ControllerName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="MenuId" Type="Int32" />
+    <NavigationProperty Name="MainMenu" Relationship="Self.FK_SubMenus_MainMenus" FromRole="SubMenus" ToRole="MainMenus" />
+  </EntityType>
+  <Association Name="FK_SubMenus_MainMenus">
+    <End Role="MainMenus" Type="Self.MainMenu" Multiplicity="0..1" />
+    <End Role="SubMenus" Type="Self.SubMenu" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MainMenus">
+        <PropertyRef Name="MenuId" />
+      </Principal>
+      <Dependent Role="SubMenus">
+        <PropertyRef Name="MenuId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DynamicMenuEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="MainMenus" EntityType="Self.MainMenu" />
+    <EntitySet Name="SubMenus" EntityType="Self.SubMenu" />
+    <AssociationSet Name="FK_SubMenus_MainMenus" Association="Self.FK_SubMenus_MainMenus">
+      <End Role="MainMenus" EntitySet="MainMenus" />
+      <End Role="SubMenus" EntitySet="SubMenus" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

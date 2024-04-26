@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DynamicMenuModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="MainMenus">
+    <Key>
+      <PropertyRef Name="MenuId" />
+    </Key>
+    <Property Name="MenuId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MenuName" Type="nvarchar" MaxLength="150" />
+    <Property Name="ActionName" Type="nvarchar" MaxLength="150" />
+    <Property Name="ControllerName" Type="nvarchar" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="SubMenus">
+    <Key>
+      <PropertyRef Name="SubMenuId" />
+    </Key>
+    <Property Name="SubMenuId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubMenuName" Type="nvarchar" MaxLength="150" />
+    <Property Name="ActionName" Type="nvarchar" MaxLength="150" />
+    <Property Name="ControllerName" Type="nvarchar" MaxLength="150" />
+    <Property Name="MenuId" Type="int" />
+  </EntityType>
+  <Association Name="FK_SubMenus_MainMenus">
+    <End Role="MainMenus" Type="Self.MainMenus" Multiplicity="0..1" />
+    <End Role="SubMenus" Type="Self.SubMenus" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="MainMenus">
+        <PropertyRef Name="MenuId" />
+      </Principal>
+      <Dependent Role="SubMenus">
+        <PropertyRef Name="MenuId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DynamicMenuModelStoreContainer">
+    <EntitySet Name="MainMenus" EntityType="Self.MainMenus" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SubMenus" EntityType="Self.SubMenus" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_SubMenus_MainMenus" Association="Self.FK_SubMenus_MainMenus">
+      <End Role="MainMenus" EntitySet="MainMenus" />
+      <End Role="SubMenus" EntitySet="SubMenus" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
